@@ -9,7 +9,7 @@ module TestBench
     module Fixture
       def assert(value)
         unless value
-          raise AssertionFailure.build(caller_locations.first)
+          raise AssertionFailure.build(caller.first)
         end
       end
 
@@ -27,12 +27,12 @@ module TestBench
           end
         end
 
-        raise AssertionFailure.build(caller_locations.first)
+        raise AssertionFailure.build(caller.first)
       end
 
       def refute(value)
         if value
-          raise AssertionFailure.build(caller_locations.first)
+          raise AssertionFailure.build(caller.first)
         end
       end
 
@@ -44,7 +44,7 @@ module TestBench
           raise error
         end
 
-        raise AssertionFailure.build(caller_locations.first)
+        raise AssertionFailure.build(caller.first)
       end
 
       def context(prose=nil, &block)
@@ -116,42 +116,55 @@ module TestBench
 
         omitting = false
 
-        error_message = error.full_message(highlight: true, order: :bottom)
+        Output.write("\e[1mTraceback\e[22m (most recent call last):", sgr_code: 0x31)
 
-        error_message.each_line.with_index do |line, index|
+        rjust_length = error.backtrace.length.to_s.length
+
+        error.backtrace[1..-1].reverse_each.with_index do |line, index|
+          line = line.dup
+
           line.chomp!
 
-          if line.start_with?("\t") && omit_backtrace_pattern.match?(line)
+          if omit_backtrace_pattern.match?(line)
             if omitting
               next
             else
               omitting = true
 
-              indentation = line.index("from ")
+              header = index.to_s.gsub(/./, '?').rjust(rjust_length, ' ')
 
-              line.slice!(indentation..-1)
-              line.gsub!(%r{[[:digit:]]}, '?')
-              line.concat("*omitted*")
-
-              Output.write(line, sgr_codes: [0x2, 0x3, 0x31])
+              Output.write("#{header}: *omitted*", sgr_codes: [0x2, 0x3, 0x31], tab_indent: true)
             end
           else
             omitting = false
 
-            Output.write(line, sgr_code: 0x31)
+            header = index.to_s.rjust(rjust_length, ' ')
+
+            Output.write("#{header}: #{line}", sgr_code: 0x31, tab_indent: true)
           end
         end
+
+        if error.message.empty?
+          if error.instance_of?(RuntimeError)
+            Output.write("#{error.backtrace[0]}: \e[1;4munhandled exception\e[24;22m", sgr_code: 0x31)
+            return
+          end
+
+          error.message = error.class
+        end
+
+        Output.write("#{error.backtrace[0]} \e[1m#{error} (\e[4m#{error.class}\e[24m)\e[22m", sgr_code: 0x31)
       end
     end
 
     module Output
       extend self
 
-      def write(text, device: nil, sgr_code: nil, sgr_codes: nil)
-        indent(text, device: device, sgr_code: sgr_code, sgr_codes: sgr_codes)
+      def write(text, device: nil, sgr_code: nil, sgr_codes: nil, tab_indent: nil)
+        indent(text, device: device, sgr_code: sgr_code, sgr_codes: sgr_codes, tab_indent: tab_indent)
       end
 
-      def indent(text, device: nil, sgr_code: nil, sgr_codes: nil, &block)
+      def indent(text, device: nil, sgr_code: nil, sgr_codes: nil, tab_indent: nil, &block)
         device ||= $stdout
 
         unless text.nil?
@@ -165,10 +178,10 @@ module TestBench
               sgr_code.to_s(16)
             end
 
-            text = "\e[#{sgr_codes * ';'}m#{text}\e[0m"
+            text = "\e[#{sgr_codes.join(';')}m#{text}\e[0m"
           end
 
-          text = "#{'  ' * indentation}#{text}"
+          text = "#{"\t" if tab_indent}#{'  ' * indentation}#{text}"
 
           device.puts(text)
         end
@@ -192,10 +205,10 @@ module TestBench
 
     class AssertionFailure < RuntimeError
       def self.build(caller_location=nil)
-        caller_location ||= caller_locations.first
+        caller_location ||= caller(0)
 
         instance = new
-        instance.set_backtrace([caller_location.to_s])
+        instance.set_backtrace([caller_location])
         instance
       end
 
@@ -206,7 +219,7 @@ module TestBench
 
     class Failure < SystemExit
       def self.build
-        new(false)
+        new(1, "TestBench::Bootstrap is aborting")
       end
     end
 
