@@ -241,7 +241,7 @@ module TestBench
             file_pattern = File.join(file_pattern, '**/*.rb')
           end
 
-          files = Dir[file_pattern].reject do |file|
+          files = Dir.glob(file_pattern).reject do |file|
             File.basename(file).match?(exclude_file_pattern)
           end
 
