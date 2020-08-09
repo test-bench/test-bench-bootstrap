@@ -1,9 +1,7 @@
 module TestBench
   module Bootstrap
-    def self.activate(receiver=nil)
-      receiver ||= TOPLEVEL_BINDING.receiver
-
-      receiver.extend(Fixture)
+    def self.activate
+      Object.include(Fixture)
     end
 
     module Fixture
