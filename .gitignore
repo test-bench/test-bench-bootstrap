@@ -1,0 +1,8 @@
+/*.gem
+/doc
+/gems
+/scratch*
+
+/bin
+/build
+/build_config.rb.lock
