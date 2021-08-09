@@ -4,7 +4,7 @@ context "Assert Raises" do
   context "Optional Error Class Omitted" do
     test "Pass" do
       assert_raises do
-        fail
+        raise "Some error"
       end
     end
 
@@ -12,53 +12,53 @@ context "Assert Raises" do
       assert_raises do
         #
       end
-
-      fail
-
-    rescue TestBench::Bootstrap::AssertionFailure
     end
+
+  rescue TestBench::Bootstrap::Abort
+    comment "(Above failure is expected)"
   end
 
   context "Optional Error Class Given" do
     test "Pass" do
-      assert_raises KeyError do
-        {}.fetch(:some_key)
+      assert_raises(NameError) do
+        SomeUnknownConstant
       end
     end
 
     context "Failure" do
-      test "No error raised" do
-        assert_raises do
-          #
+      context do
+        test "No error raised" do
+          assert_raises(NameError) do
+            #
+          end
         end
 
-        fail
-
-      rescue TestBench::Bootstrap::AssertionFailure
+      rescue TestBench::Bootstrap::Abort
+        comment "(Above failure is expected)"
       end
 
       context "Unrelated Error Class Raised" do
-        test "Error is not rescued" do
-          assert_raises ArgumentError do
-            {}.fetch(:some_key)
+        test do
+          assert_raises(ArgumentError) do
+            SomeUnknownConstant
           end
-
-          fail
-
-        rescue KeyError
         end
+
+      rescue TestBench::Bootstrap::Abort
+        comment "(Above failure is expected)"
       end
 
       context "Subclass Of Expected Error Class Raised" do
+        cls = Class.new(NameError)
+
         test "Error is not rescued" do
-          assert_raises IndexError do
-            {}.fetch(:some_key)
+          assert_raises(NameError) do
+            raise cls, "Example subclass error"
           end
-
-          fail
-
-        rescue KeyError
         end
+
+      rescue TestBench::Bootstrap::Abort
+        comment "(Above failure is expected)"
       end
     end
   end

@@ -6,11 +6,9 @@ context "Assert" do
   end
 
   test "Failure" do
-    begin
-      assert(false)
-    rescue TestBench::Bootstrap::AssertionFailure => assertion_failure
-    end
-
-    assert(!assertion_failure.nil?)
+    assert(false)
   end
+
+rescue TestBench::Bootstrap::Abort
+  comment "(Above failure is expected)"
 end

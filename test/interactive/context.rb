@@ -13,9 +13,7 @@ context "Context" do
         assert(false)
       end
 
-      fail
-
-    rescue TestBench::Bootstrap::Failure
+    rescue TestBench::Bootstrap::Abort
       comment "(Above failure is expected)"
     end
   end
@@ -32,9 +30,7 @@ context "Context" do
         assert(false)
       end
 
-      fail
-
-    rescue TestBench::Bootstrap::Failure
+    rescue TestBench::Bootstrap::Abort
       comment "(Above failure is expected)"
     end
   end

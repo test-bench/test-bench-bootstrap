@@ -1,7 +1,10 @@
 require_relative './interactive_init'
 
 context "Comment" do
+  comment "Some comment"
+  detail "Some detail"
+
   test do
-    comment "Some comment"
+    assert(true)
   end
 end

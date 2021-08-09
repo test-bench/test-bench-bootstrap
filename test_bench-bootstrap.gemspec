@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name = 'test_bench-bootstrap'
-  s.version = '2.1.2'
+  s.version = '3.0.0'
 
   s.authors = ['Nathan Ladd']
   s.email = 'nathanladd+github@gmail.com'
@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
 
   s.require_paths = %w(lib)
-  s.files = Dir.glob 'lib/**/*'
+  s.files = 'lib/test_bench/bootstrap.rb'
 end
