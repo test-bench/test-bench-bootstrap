@@ -4,22 +4,6 @@ module TestBench
       Object.include(Fixture)
     end
 
-    if RUBY_ENGINE != 'mruby'
-      class Abort < SystemExit
-        def self.build
-          new(1)
-        end
-      end
-    end
-
-    class Abort
-      def self.call
-        Output.raw_write("#{Bootstrap} is aborting\n")
-        instance = build
-        raise instance
-      end
-    end
-
     module Backtrace
       if RUBY_ENGINE != 'mruby'
         def self.frame(frame_index)
@@ -91,7 +75,6 @@ module TestBench
 
       def assert_raises(error_class=nil, &block)
         begin
-          Output.raw_write("assert_raises\n")
           block.()
 
         rescue (error_class || StandardError) => error
@@ -137,14 +120,7 @@ module TestBench
           return
         end
 
-        begin
-          block.()
-
-        rescue => error
-          Output.error(error)
-
-          Abort.()
-        end
+        block.()
       end
 
       def _context(prose=nil, &block)
@@ -163,11 +139,9 @@ module TestBench
           Output.indent(prose, sgr_code: 0x32)
 
         rescue => error
-          Output.indent(prose, sgr_codes: [0x1, 0x31]) do
-            Output.error(error)
-          end
+          Output.indent(prose, sgr_codes: [0x1, 0x31])
 
-          Abort.()
+          raise error
         end
       end
 
@@ -197,63 +171,6 @@ module TestBench
 
       def write(text, device: nil, sgr_code: nil, sgr_codes: nil, tab_indent: nil)
         indent(text, device: device, sgr_code: sgr_code, sgr_codes: sgr_codes, tab_indent: tab_indent)
-      end
-
-      def error(error)
-        omit_backtrace_pattern = Defaults.omit_backtrace_pattern
-
-        omitting = false
-
-        write("\e[1mTraceback\e[22m (most recent call last):", sgr_code: 0x31)
-
-        rjust_length = error.backtrace.length.to_s.length
-
-        reverse_backtrace = error.backtrace[1..-1].reverse
-
-        reverse_backtrace.each_with_index do |frame, index|
-          frame = frame.dup
-          frame.chomp!
-
-          previous_frame = frame
-
-          file, _ = frame.split(':', 2)
-
-          line = ' ' * rjust_length
-
-          index_text = index.to_s
-          index_range = (-index_text.length..-1)
-
-          if Path.match?(omit_backtrace_pattern, file)
-            if omitting
-              next
-            else
-              omitting = true
-
-              line[index_range] = '?' * index_text.length
-              line += ": *omitted*"
-
-              write(line, sgr_codes: [0x2, 0x3, 0x31], tab_indent: true)
-            end
-          else
-            omitting = false
-
-            line[index_range] = index_text
-            line += ": #{frame}"
-
-            write(line, sgr_code: 0x31, tab_indent: true)
-          end
-        end
-
-        if error.message.empty?
-          if error.instance_of?(RuntimeError)
-            write("#{error.backtrace[0]}: \e[1;4munhandled exception\e[24;22m", sgr_code: 0x31)
-            return
-          end
-
-          error.message = error.class
-        end
-
-        write("#{error.backtrace[0]}: \e[1m#{error} (\e[4m#{error.class}\e[24m)\e[22m", sgr_code: 0x31)
       end
 
       def newline

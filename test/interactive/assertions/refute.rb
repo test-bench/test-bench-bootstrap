@@ -15,6 +15,6 @@ context "Refute" do
     refute(true)
   end
 
-rescue TestBench::Bootstrap::Abort
+rescue TestBench::Bootstrap::AssertionFailure
   comment "(Above failure is expected)"
 end

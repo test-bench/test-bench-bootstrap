@@ -14,7 +14,7 @@ context "Assert Raises" do
       end
     end
 
-  rescue TestBench::Bootstrap::Abort
+  rescue TestBench::Bootstrap::AssertionFailure
     comment "(Above failure is expected)"
   end
 
@@ -33,7 +33,7 @@ context "Assert Raises" do
           end
         end
 
-      rescue TestBench::Bootstrap::Abort
+      rescue TestBench::Bootstrap::AssertionFailure
         comment "(Above failure is expected)"
       end
 
@@ -44,7 +44,7 @@ context "Assert Raises" do
           end
         end
 
-      rescue TestBench::Bootstrap::Abort
+      rescue NameError
         comment "(Above failure is expected)"
       end
 
@@ -57,7 +57,7 @@ context "Assert Raises" do
           end
         end
 
-      rescue TestBench::Bootstrap::Abort
+      rescue cls
         comment "(Above failure is expected)"
       end
     end

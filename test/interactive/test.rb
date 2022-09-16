@@ -13,7 +13,7 @@ context "Test" do
         assert(false)
       end
 
-    rescue TestBench::Bootstrap::Abort
+    rescue TestBench::Bootstrap::AssertionFailure
       comment "(Above failure is expected)"
     end
 
@@ -22,7 +22,7 @@ context "Test" do
         raise "Some error"
       end
 
-    rescue TestBench::Bootstrap::Abort
+    rescue RuntimeError
       comment "(Above failure is expected)"
     end
   end
@@ -39,7 +39,7 @@ context "Test" do
         assert(false)
       end
 
-    rescue TestBench::Bootstrap::Abort
+    rescue TestBench::Bootstrap::AssertionFailure
       comment "(Above failure is expected)"
     end
   end

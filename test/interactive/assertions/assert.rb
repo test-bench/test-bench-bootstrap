@@ -9,6 +9,6 @@ context "Assert" do
     assert(false)
   end
 
-rescue TestBench::Bootstrap::Abort
+rescue TestBench::Bootstrap::AssertionFailure
   comment "(Above failure is expected)"
 end
