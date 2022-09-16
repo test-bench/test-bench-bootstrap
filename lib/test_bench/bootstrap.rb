@@ -139,7 +139,7 @@ module TestBench
           Output.indent(prose, sgr_code: 0x32)
 
         rescue => error
-          Output.indent(prose, sgr_codes: [0x1, 0x31])
+          Output.indent(prose || 'Test', sgr_codes: [0x1, 0x31])
 
           raise error
         end

@@ -18,6 +18,15 @@ context "Test" do
     end
 
     begin
+      test do
+        assert(false)
+      end
+
+    rescue TestBench::Bootstrap::AssertionFailure
+      comment "(Above failure is expected)"
+    end
+
+    begin
       test "Error" do
         raise "Some error"
       end
