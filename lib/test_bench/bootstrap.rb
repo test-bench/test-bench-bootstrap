@@ -107,14 +107,14 @@ module TestBench
         raise AssertionFailure.build(1)
       end
 
-      def context(prose=nil, &block)
+      def context(title=nil, &block)
         if block.nil?
-          Output.write(prose || 'Context', sgr_code: 0x33)
+          Output.write(title || 'Context', sgr_code: 0x33)
           return
         end
 
-        unless prose.nil?
-          Output.indent(prose, sgr_code: 0x32) do
+        unless title.nil?
+          Output.indent(title, sgr_code: 0x32) do
             context(&block)
           end
           return
@@ -123,30 +123,30 @@ module TestBench
         block.()
       end
 
-      def _context(prose=nil, &block)
-        context(prose)
+      def _context(title=nil, &block)
+        context(title)
       end
 
-      def test(prose=nil, &block)
+      def test(title=nil, &block)
         if block.nil?
-          Output.write(prose || 'Test', sgr_code: 0x33)
+          Output.write(title || 'Test', sgr_code: 0x33)
           return
         end
 
         begin
           block.()
 
-          Output.indent(prose, sgr_code: 0x32)
+          Output.indent(title, sgr_code: 0x32)
 
         rescue => error
-          Output.indent(prose || 'Test', sgr_codes: [0x1, 0x31])
+          Output.indent(title || 'Test', sgr_codes: [0x1, 0x31])
 
           raise error
         end
       end
 
-      def _test(prose=nil, &block)
-        test(prose)
+      def _test(title=nil, &block)
+        test(title)
       end
 
       def comment(text)
