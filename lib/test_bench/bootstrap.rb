@@ -122,6 +122,7 @@ module TestBench
 
         block.()
       end
+      alias_method :context!, :context
 
       def _context(title=nil, &block)
         context(title)
@@ -144,6 +145,7 @@ module TestBench
           raise error
         end
       end
+      alias_method :test!, :test
 
       def _test(title=nil, &block)
         test(title)
