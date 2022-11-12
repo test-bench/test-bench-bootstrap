@@ -151,12 +151,16 @@ module TestBench
         test(title)
       end
 
-      def comment(text)
+      def comment(text, *additional_lines)
         Output.write(text)
+
+        additional_lines.each do |line|
+          comment(line.chomp)
+        end
       end
 
-      def detail(text)
-        comment(text)
+      def detail(...)
+        comment(...)
       end
 
       def fixture(cls, *args, **kwargs, &block)
