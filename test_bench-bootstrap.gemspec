@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name = 'test_bench-bootstrap'
-  s.version = '6.0.0'
+  s.version = '6.1.0'
 
   s.authors = ['Nathan Ladd']
   s.email = 'nathanladd+github@gmail.com'
