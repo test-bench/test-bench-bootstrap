@@ -151,30 +151,38 @@ module TestBench
         test(title)
       end
 
-      def comment(text)
-        Output.indent(text)
+      def comment(comment)
+        Output.indent(comment)
       end
 
-      def detail(text, *supplemental_lines, title: nil)
-        if supplemental_lines.none? && title.nil?
-          comment(text)
-          return
+      def detail(detail, *additional_details, quote: nil, heading: nil)
+        details = [detail, *additional_details]
+
+        if quote.nil?
+          quote = details.last.end_with?("\n")
         end
 
-        title = !text.end_with?("\n") if title.nil?
-
-        if title
-          title_text = text.chomp
-          Output.indent(title_text, sgr_codes: [0x1, 0x4])
-        else
-          first_supplemental_line = text
-          supplemental_lines.unshift(first_supplemental_line)
+        if quote
+          if heading.nil?
+            heading = !detail.end_with?("\n")
+          end
         end
 
-        supplemental_lines.each do |line|
-          line.chomp!
+        if heading
+          heading_text = details.shift
+          Output.indent(heading_text, sgr_codes: [0x1, 0x4])
+        end
 
-          Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
+        details.each do |detail|
+          if quote
+            detail.each_line do |line|
+              line.chomp!
+
+              Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
+            end
+          else
+            Output.comment(detail)
+          end
         end
       end
 
