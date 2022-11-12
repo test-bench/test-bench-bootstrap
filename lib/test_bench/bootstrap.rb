@@ -151,24 +151,31 @@ module TestBench
         test(title)
       end
 
-      def comment(text, quote: nil)
-        if quote.nil?
-          quote = text.end_with?("\n")
-        end
-
-        if not quote
-          Output.indent(text)
-        else
-          text.each_line.each do |line|
-            line.chomp!
-
-            Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
-          end
-        end
+      def comment(text)
+        Output.indent(text)
       end
 
-      def detail(...)
-        comment(...)
+      def detail(text, *supplemental_lines, title: nil)
+        if supplemental_lines.none? && title.nil?
+          comment(text)
+          return
+        end
+
+        title = !text.end_with?("\n") if title.nil?
+
+        if title
+          title_text = text.chomp
+          Output.indent(title_text, sgr_codes: [0x1, 0x4])
+        else
+          first_supplemental_line = text
+          supplemental_lines.unshift(first_supplemental_line)
+        end
+
+        supplemental_lines.each do |line|
+          line.chomp!
+
+          Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
+        end
       end
 
       def fixture(cls, *args, **kwargs, &block)
