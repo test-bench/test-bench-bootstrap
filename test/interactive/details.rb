@@ -13,6 +13,14 @@ context "Details" do
     context "Heading, No Details" do
       detail "Some Heading:", quote: false, heading: true
     end
+
+    context "Heading, Empty String" do
+      detail "Some Heading:", '', quote: false, heading: true
+    end
+
+    context "No Heading, Empty String" do
+      detail '', quote: false, heading: false
+    end
   end
 
   context "Quote Format" do
@@ -27,6 +35,14 @@ context "Details" do
     context "Heading, No Details" do
       detail "Some Heading:", quote: true, heading: true
     end
+
+    context "Heading, Empty String" do
+      detail "Some Heading:", '', quote: true, heading: true
+    end
+
+    context "No Heading, Empty String" do
+      detail '', quote: true, heading: false
+    end
   end
 
   context "Default" do
@@ -40,6 +56,10 @@ context "Details" do
 
     context "Comment Format" do
       detail "Some text", "Some other text"
+    end
+
+    context "No Heading" do
+      detail ''
     end
   end
 end

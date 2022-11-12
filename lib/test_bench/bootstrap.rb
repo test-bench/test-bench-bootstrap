@@ -159,7 +159,11 @@ module TestBench
         details = [detail, *additional_details]
 
         if quote.nil?
-          quote = details.last.end_with?("\n")
+          if additional_details == ['']
+            quote = true
+          else
+            quote = details.last.end_with?("\n")
+          end
         end
 
         if quote
@@ -174,11 +178,16 @@ module TestBench
         end
 
         details.each do |detail|
+          if detail.empty?
+            Output.indent("\e[2;3m(empty)\e[23;22m")
+            next
+          end
+
           if quote
             detail.each_line do |line|
               line.chomp!
 
-              Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
+              Output.indent("\e[2m> \e[22m#{line}")
             end
           else
             Output.indent(detail)
