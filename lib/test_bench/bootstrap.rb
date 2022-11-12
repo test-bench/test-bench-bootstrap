@@ -151,11 +151,19 @@ module TestBench
         test(title)
       end
 
-      def comment(text, *additional_lines)
-        Output.write(text)
+      def comment(text, quote: nil)
+        if quote.nil?
+          quote = text.end_with?("\n")
+        end
 
-        additional_lines.each do |line|
-          comment(line.chomp)
+        if not quote
+          Output.indent(text)
+        else
+          text.each_line.each do |line|
+            line.chomp!
+
+            Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
+          end
         end
       end
 
