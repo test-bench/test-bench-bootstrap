@@ -151,8 +151,8 @@ module TestBench
         test(title)
       end
 
-      def comment(comment)
-        Output.indent(comment)
+      def comment(...)
+        detail(...)
       end
 
       def detail(detail, *additional_details, quote: nil, heading: nil)
@@ -181,7 +181,7 @@ module TestBench
               Output.indent("\e[2m>\e[22m \e[3m#{line}\e[0m")
             end
           else
-            Output.comment(detail)
+            Output.indent(detail)
           end
         end
       end
