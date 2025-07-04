@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'test_bench_bootstrap'
+
+exit_code = TestBenchBootstrap::TestBench::Executable.()
+
+exit(exit_code)

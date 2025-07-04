@@ -1,0 +1,2 @@
+require 'test_bench_bootstrap/import_constants/macro'
+require 'test_bench_bootstrap/import_constants/import_constants'

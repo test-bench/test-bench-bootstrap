@@ -1,12 +1,10 @@
 # Test Bench Bootstrap
 
-*[Summary goes here]*
-
-*[Description goes here]*
+Bootstrap implementation of TestBench for testing TestBench.
 
 ## Documentation
 
-*[Link to documentation goes here]*
+See the [TestBench website](http://test-bench.software) for more information, examples, and user guides.
 
 ## License
 

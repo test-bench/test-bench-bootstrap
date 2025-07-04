@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |spec|
   spec.name = 'test_bench_bootstrap'
-  spec.version = '0.0.0.0'
+  spec.version = '3.0.0.0.pre.1'
 
-  spec.summary = "## Summary goes here"
+  spec.summary = "Bootstrap implementation of TestBench for testing TestBench"
   spec.description = <<~TEXT.each_line(chomp: true).map(&:strip).join(' ')
-  ## Description goes here
+  #{spec.summary}
   TEXT
 
   spec.homepage = 'http://test-bench.software'
@@ -22,9 +22,12 @@ Gem::Specification.new do |spec|
   spec.authors = ['Brightworks Digital']
   spec.email = 'development@bright.works'
 
-  spec.require_paths = ['lib']
+  spec.require_paths = ['lib', 'upstream-lib']
 
-  spec.files = Dir.glob('lib/**/*')
+  spec.files = Dir.glob('{lib,upstream-lib}/**/*')
+
+  spec.bindir = 'executables'
+  spec.executables = Dir.glob('executables/*').map { |executable| File.basename(executable) }
 
   spec.platform = Gem::Platform::RUBY
 
