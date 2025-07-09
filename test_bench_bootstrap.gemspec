@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |spec|
-  spec.name = 'test_bench_bootstrap'
+  spec.name = 'test_bench-bootstrap'
   spec.version = '3.0.0.0.pre.1'
 
   spec.summary = "Bootstrap implementation of TestBench for testing TestBench"
