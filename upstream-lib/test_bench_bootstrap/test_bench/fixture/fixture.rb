@@ -118,6 +118,13 @@ module TestBenchBootstrap
         return text, disposition
       end
 
+      ## Remove when no longer in use - Nathan, Tue Jul 15 2025
+      def self.output(fixture)
+        test_session = fixture.test_session
+
+        Output::Get.(test_session)
+      end
+
       def comment(heading_text=nil, text_or_fixture, style: nil, disposition: nil)
         if not heading_text.nil?
           heading_style = Output::CommentStyle.heading
@@ -193,10 +200,6 @@ module TestBenchBootstrap
         if not context(...)
           throw(Session::ExecutionBreak)
         end
-      end
-
-      def execute(file_path)
-        test_session.execute(file_path)
       end
 
       def fixture(fixture_class, *, test_session: nil, **, &)

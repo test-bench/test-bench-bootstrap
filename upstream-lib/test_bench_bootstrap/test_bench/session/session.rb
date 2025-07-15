@@ -5,6 +5,9 @@ module TestBenchBootstrap
 
       ExecutionBreak = Object.new
 
+      ## Remove when no longer in use - Nathan, Tue Jul 15 2025
+      Abort = ExecutionBreak
+
       def telemetry
         @telemetry ||= Telemetry::Substitute.build
       end
@@ -202,34 +205,32 @@ module TestBenchBootstrap
 
         catch(ExecutionBreak) do
           block.(self)
+
+        rescue Failure => failure
+          message = failure.message
+          record_event(Events::Failed.build(message))
+
+        rescue ::Exception => exception
+          aborted_recorded = status.error_sequence > previous_status.error_sequence
+
+          if not aborted_recorded
+            location = format_backtrace.(exception)
+
+            message = exception.detailed_message
+
+            record_event(Events::Aborted.build(message, location))
+          end
+
+          raise exception
+
+        ensure
+          result = status.result(previous_status, pending_event)
+
+          pending_event.result = result
+          record_event(pending_event)
         end
 
-      rescue Failure => failure
-        message = failure.message
-        record_event(Events::Failed.build(message))
-
-      rescue ::Exception => exception
-        aborted_recorded = status.error_sequence > previous_status.error_sequence
-
-        if not aborted_recorded
-          location = format_backtrace.(exception)
-
-          message = exception.detailed_message
-
-          record_event(Events::Aborted.build(message, location))
-        end
-
-        raise exception
-
-      ensure
-        result = status.result(previous_status, pending_event)
-
-        pending_event.result = result
-        record_event(pending_event)
-
-        if exception.nil?
-          return result
-        end
+        result
       end
     end
   end

@@ -43,6 +43,10 @@ module TestBenchBootstrap
       Session.register_telemetry_sink(telemetry_sink)
     end
 
+    def self.session
+      Session.instance
+    end
+
     def self.establish_output(session)
       if session.telemetry.sinks.none?
         Output.register_telemetry_sink(session)

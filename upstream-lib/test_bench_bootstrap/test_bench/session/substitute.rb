@@ -131,6 +131,18 @@ module TestBenchBootstrap
             RUBY
           end
 
+          alias :test? :any_test_started_event?
+          alias :one_test? :one_test_started_event?
+
+          alias :context? :any_context_started_event?
+          alias :one_context? :one_context_started_event?
+
+          alias :comment? :any_commented_event?
+          alias :one_comment? :one_commented_event?
+
+          alias :detail? :any_detailed_event?
+          alias :one_detail? :one_detailed_event?
+
           def one_event?(...)
             sink.one_event?(...)
           end
