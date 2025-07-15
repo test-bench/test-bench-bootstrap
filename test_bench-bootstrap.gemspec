@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |spec|
   spec.name = 'test_bench-bootstrap'
-  spec.version = '7.0.1'
+  spec.version = '7.0.2'
 
   spec.summary = "Bootstrap implementation of TestBench for testing TestBench"
   spec.description = <<~TEXT.each_line(chomp: true).map(&:strip).join(' ')
