@@ -548,7 +548,7 @@ module TestBenchBootstrap
 
       module Defaults
         def self.detail_policy
-          env_var_value = ENV.fetch('TEST_BENCH_OUTPUT_DETAIL', 'failure')
+          env_var_value = ENV.fetch('TEST_BENCH_DETAIL', 'failure')
 
           detail_policy = env_var_value.to_sym
 

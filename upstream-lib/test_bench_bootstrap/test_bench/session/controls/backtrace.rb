@@ -31,10 +31,12 @@ module TestBenchBootstrap
 
           module Styling
             def self.example
+              backtrace = AbsolutePaths::Local::Backtrace.example(styling: true)
+
               [
-                Exception::Example.backtrace.first,
+                backtrace.first,
                 "\e[2;3m*omitted*\e[23;22m",
-                Exception::Example.backtrace.last
+                backtrace.last
               ]
             end
           end
@@ -66,13 +68,37 @@ module TestBenchBootstrap
               end
 
               def self.backtrace
-                Exception::AbsolutePaths::Example.backtrace_locations.map do |backtrace_location|
-                  backtrace_location.to_s.delete_prefix(::File.join(apex_directory, ''))
-                end
+                Backtrace.example
               end
 
               def self.apex_directory
-                Path::ApexDirectory.tmpdir
+                Backtrace.apex_directory
+              end
+
+              module Backtrace
+                def self.example(styling: nil)
+                  styling ||= false
+
+                  if styling
+                    relative_path_prefix = "\e[2m./\e[22m"
+                  else
+                    relative_path_prefix = "./"
+                  end
+
+                  Exception::AbsolutePaths::Example.backtrace_locations.map do |backtrace_location|
+                    backtrace_location_text = backtrace_location.to_s
+
+                    backtrace_location_text.delete_prefix!(::File.join(apex_directory, ''))
+
+                    backtrace_location_text.insert(0, relative_path_prefix)
+
+                    backtrace_location_text
+                  end
+                end
+
+                def self.apex_directory
+                  Path::ApexDirectory.tmpdir
+                end
               end
             end
           end

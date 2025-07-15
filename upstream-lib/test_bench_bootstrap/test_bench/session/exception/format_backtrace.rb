@@ -39,7 +39,7 @@ module TestBenchBootstrap
             if styling?
               omitted_text = "\e[2;3m*omitted*\e[23;22m"
             else
-              omitted_text = "*omitted*"
+              omitted_text = '*omitted*'
             end
 
             backtrace = []
@@ -65,10 +65,8 @@ module TestBenchBootstrap
               end
             end
 
-            apex_directory_prefix = ::File.join(apex_directory, '')
-
             backtrace.each do |backtrace_location_text|
-              backtrace_location_text.delete_prefix!(apex_directory_prefix)
+              delete_apex_directory_prefix(backtrace_location_text)
             end
 
             exception.set_backtrace(backtrace)
@@ -84,7 +82,7 @@ module TestBenchBootstrap
             location ||= exception.backtrace_locations.first
 
             location = "#{location.path}:#{location.lineno}"
-            location.delete_prefix!(apex_directory_prefix)
+            delete_apex_directory_prefix(location)
             location
           end
 
@@ -93,6 +91,20 @@ module TestBenchBootstrap
 
             omit_patterns.any? do |omit_pattern|
               ::File.fnmatch?(omit_pattern, backtrace_path, ::File::FNM_EXTGLOB)
+            end
+          end
+
+          def delete_apex_directory_prefix(backtrace_location_text)
+            if styling?
+              relative_path_prefix = "\e[2m./\e[22m"
+            else
+              relative_path_prefix = './'
+            end
+
+            apex_directory_prefix = ::File.join(apex_directory, '')
+
+            if backtrace_location_text.delete_prefix!(apex_directory_prefix)
+              backtrace_location_text.insert(0, relative_path_prefix)
             end
           end
 
