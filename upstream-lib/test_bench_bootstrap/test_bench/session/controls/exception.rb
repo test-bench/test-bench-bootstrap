@@ -74,6 +74,19 @@ module TestBenchBootstrap
 
             Example = self.example
           end
+
+          module NoBacktraceLocation
+            def self.example
+              backtrace = Backtrace.example
+
+              raise SomeException, Exception.exception_message, backtrace
+
+            rescue SomeException => exception
+              return exception
+            else
+              abort "Unreachable"
+            end
+          end
         end
       end
     end

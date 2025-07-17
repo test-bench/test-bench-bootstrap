@@ -28,6 +28,12 @@ module TestBenchBootstrap
           arguments ||= ::ARGV
           env ||= ::ENV
 
+          options_env_var = env['TEST_BENCH_OPTIONS']
+          if not options_env_var.nil?
+            env_arguments = Shellwords.split(options_env_var)
+            arguments.unshift(*env_arguments)
+          end
+
           instance = new(arguments)
 
           instance.env = env
@@ -90,9 +96,9 @@ module TestBenchBootstrap
               ].compact.join(':')
 
             when '-d', '--detail'
-              env['TEST_BENCH_OUTPUT_DETAIL'] = 'on'
+              env['TEST_BENCH_DETAIL'] = 'on'
             when '-D', '--no-detail'
-              env['TEST_BENCH_OUTPUT_DETAIL'] = 'off'
+              env['TEST_BENCH_DETAIL'] = 'off'
 
             when '--device'
               device = require_next_argument(switch)
@@ -203,11 +209,12 @@ module TestBenchBootstrap
     TEST_BENCH_STRICT                     See --strict
     TEST_BENCH_RANDOM_SEED                See --random-seed
     TEST_BENCH_FILTER_BACKTRACE_PATTERN   See --filter-backtrace
-    TEST_BENCH_OUTPUT_DETAIL              See --detail
+    TEST_BENCH_DETAIL                     See --detail
     TEST_BENCH_OUTPUT_DEVICE              See --device
     TEST_BENCH_OUTPUT_LEVEL               See --output-level
     TEST_BENCH_OUTPUT_STYLING             See --output-styling
     TEST_BENCH_DEFAULT_TEST_PATH          Specifies default path
+    TEST_BENCH_OPTIONS                    Evaluated as command line arguments similar to RUBYOPT
 
               TEXT
               exit(true)

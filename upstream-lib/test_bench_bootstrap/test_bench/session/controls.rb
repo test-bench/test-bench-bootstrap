@@ -15,12 +15,12 @@ require 'test_bench_bootstrap/test_bench/session/controls/path/apex_directory'
 require 'test_bench_bootstrap/test_bench/session/controls/path/file'
 require 'test_bench_bootstrap/test_bench/session/controls/path/file/create'
 
+require 'test_bench_bootstrap/test_bench/session/controls/backtrace'
+require 'test_bench_bootstrap/test_bench/session/controls/backtrace/location'
+
 require 'test_bench_bootstrap/test_bench/session/controls/exception/raise'
 require 'test_bench_bootstrap/test_bench/session/controls/exception'
 require 'test_bench_bootstrap/test_bench/session/controls/exception/message'
-
-require 'test_bench_bootstrap/test_bench/session/controls/backtrace'
-require 'test_bench_bootstrap/test_bench/session/controls/backtrace/location'
 
 require 'test_bench_bootstrap/test_bench/session/controls/text'
 require 'test_bench_bootstrap/test_bench/session/controls/message'

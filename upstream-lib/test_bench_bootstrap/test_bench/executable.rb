@@ -1,3 +1,5 @@
+require 'test_bench_bootstrap/shellwords'
+
 require 'test_bench_bootstrap/test_bench/run'
 
 require 'test_bench_bootstrap/test_bench/executable/defaults'
