@@ -1,4 +1,4 @@
-require 'test_bench_bootstrap/shellwords'
+require 'shellwords'
 
 require 'test_bench_bootstrap/test_bench/run'
 

@@ -41,7 +41,7 @@ for gem_dir in $install_dir/gems/*; do
 ,g/^require '.*'$/s/^require '(.*)'$/require 'test_bench_bootstrap\/\1'/
 #
 ## Correct require statements for standard libraries
-,g/^require '.*'$/s/^require 'test_bench_bootstrap\/(json|fileutils|tempfile)'$/require '\1'/
+,g/^require '.*'$/s/^require 'test_bench_bootstrap\/(json|fileutils|tempfile|shellwords)'$/require '\1'/
 #
 ## Find all outermost module and class declarations, then indent every line, ...
 ,g/^(module|class)/,s/^(.)/  \\1/\\
