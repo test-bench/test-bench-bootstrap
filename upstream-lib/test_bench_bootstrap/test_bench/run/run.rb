@@ -76,8 +76,8 @@ module TestBenchBootstrap
         receiver.public_send(:"#{attr_name}=", instance)
       end
 
-      def self.call(path, exclude: nil)
-        session = establish_session
+      def self.call(path, session: nil, exclude: nil)
+        session ||= establish_session
 
         instance = build(exclude:, session:)
 
@@ -95,7 +95,7 @@ module TestBenchBootstrap
       def call(&block)
         block.(self)
 
-        session.isolate.stop
+        session.close
 
         if print_summary?
           summary.print
@@ -118,9 +118,6 @@ module TestBenchBootstrap
 
           session.execute(file_path)
         end
-
-      rescue SelectFiles::PathNotFoundError
-        session.execute(path)
       end
       alias :<< :path
 

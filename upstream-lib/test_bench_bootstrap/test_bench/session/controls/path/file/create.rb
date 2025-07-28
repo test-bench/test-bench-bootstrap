@@ -68,14 +68,14 @@ module TestBenchBootstrap
               end
 
               module Comment
-                def self.call(text: nil, apex_directory: nil)
+                def self.call(text: nil, apex_directory: nil, relative: nil)
                   text ||= self.text
 
                   basename = "write_comment__#{text.gsub(' ', '_')}"
 
                   content = Content.example(text:)
 
-                  Create.(content, basename:, apex_directory:)
+                  Create.(content, basename:, apex_directory:, relative:)
                 end
 
                 def self.content

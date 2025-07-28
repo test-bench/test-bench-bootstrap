@@ -18,17 +18,7 @@ module TestBenchBootstrap
               @paths ||= []
             end
 
-            attr_accessor :raise_path_not_found_error
-
-            def raise_path_not_found_error!
-              self.raise_path_not_found_error = true
-            end
-
             def call(path, &block)
-              if raise_path_not_found_error
-                raise PathNotFoundError
-              end
-
               self.paths << path
 
               files.each(&block)

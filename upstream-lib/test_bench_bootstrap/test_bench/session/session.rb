@@ -38,12 +38,12 @@ module TestBenchBootstrap
       end
       attr_writer :assertion_sequence
 
-      def self.build
+      def self.build(apex_directory: nil)
         instance = new
 
         Telemetry.configure(instance)
         Exception::FormatBacktrace.configure(instance)
-        Isolate.configure(instance)
+        Isolate.configure(instance, apex_directory:)
 
         instance
       end
@@ -65,6 +65,10 @@ module TestBenchBootstrap
 
       def self.register_telemetry_sink(telemetry_sink)
         instance.register_telemetry_sink(telemetry_sink)
+      end
+
+      def close
+        isolate.stop
       end
 
       def assert(value, failure_message)

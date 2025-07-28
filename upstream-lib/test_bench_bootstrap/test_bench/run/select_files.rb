@@ -2,8 +2,6 @@ module TestBenchBootstrap
   module TestBench
     class Run
       class SelectFiles
-        PathNotFoundError = Class.new(RuntimeError)
-
         def exclude_patterns
           @exclude_patterns ||= []
         end
@@ -31,7 +29,8 @@ module TestBenchBootstrap
         def call(path, &block)
           full_path = ::File.expand_path(path, apex_directory)
           if not ::File.exist?(full_path)
-            raise PathNotFoundError, "No such file or directory - #{full_path}"
+            block.(path)
+            return
           end
 
           extension = ::File.extname(path)
